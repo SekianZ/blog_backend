@@ -16,7 +16,13 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('body');
-            $table->string('image')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('post_id')->constrained()->onDelete('cascade');
+            $table->string('url'); // ruta o nombre de archivo
             $table->timestamps();
         });
     }
@@ -26,6 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('images');
         Schema::dropIfExists('posts');
     }
 };
