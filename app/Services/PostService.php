@@ -14,7 +14,7 @@ class PostService
 {
     public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
     {
-        return Post::with(['user', 'images', 'likes', 'comments'])->latest()->paginate($perPage);
+        return Post::with(['user', 'images'])->latest()->paginate($perPage);
     }
 
     public function search(string $query, int $perPage = 10): LengthAwarePaginator
