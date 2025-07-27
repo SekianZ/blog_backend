@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Image;
+use App\Models\Like;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Comment;
@@ -31,6 +32,11 @@ class DatabaseSeeder extends Seeder
             
             // Crear 1 comentario hecho por el mismo autor del post
             Comment::factory()->create([
+                'post_id' => $post->id,
+                'user_id' => $user->id, // MISMO USUARIO DEL POST
+            ]);
+
+            Like::factory()->create([
                 'post_id' => $post->id,
                 'user_id' => $user->id, // MISMO USUARIO DEL POST
             ]);
