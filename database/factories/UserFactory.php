@@ -5,7 +5,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -23,11 +24,33 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        // Crear el manager con el driver gd
+        $manager = new ImageManager(new Driver);
+
+        // Nombre único para la imagen
+        $filename = 'profile_' . Str::random(10) . '.jpg';
+        $relativePath = 'profiles/' . $filename;
+        $fullPath = storage_path('app/public/' . $relativePath);
+
+        // Crear carpeta si no existe
+        $directory = dirname($fullPath);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        // Crear imagen avatar
+        $color = sprintf("#%06x", mt_rand(0, 0xFFFFFF));
+        $avatar = $manager->create(200, 200)->fill($color);
+
+        // Guardar imagen
+        $avatar->save($fullPath, quality: 80);
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'username' => $this->faker->userName(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'profile_photo' => 'storage/' . $relativePath, // <- aquí
+            'cellphone' => $this->faker->phoneNumber(),
             'remember_token' => Str::random(10),
         ];
     }
