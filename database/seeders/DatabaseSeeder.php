@@ -17,8 +17,9 @@ class DatabaseSeeder extends Seeder
         $user = User::firstOrCreate([
             'email' => 'test@example.com',
         ], [
-            'name' => 'Test User',
-            'password' => bcrypt('password'),
+            'username' => 'user',
+            'password' => 12345678,
+            'cellphone' => '123456789',
         ]);
 
         // Crear 15 posts asociados al usuario
