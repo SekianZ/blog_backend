@@ -24,7 +24,7 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'body' => 'sometimes|string',
-            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'images.*' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 }

@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // máximo 2MB por imagen
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // máximo 2MB por imagen
         ];
     }
 }
