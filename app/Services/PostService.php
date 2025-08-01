@@ -18,6 +18,14 @@ class PostService
         return Post::with(['user', 'images'])->latest()->paginate($perPage);
     }
 
+    public function getPostsByUser(int $userId, int $perPage = 15): LengthAwarePaginator
+    {
+        return Post::where('user_id', $userId)
+            ->with(['user:id,username,email', 'images:id,post_id,url'])
+            ->latest()
+            ->paginate($perPage);
+    }
+
     public function search(string $query, int $perPage = 10): LengthAwarePaginator
     {
         return Post::where('title', 'like', "%$query%")

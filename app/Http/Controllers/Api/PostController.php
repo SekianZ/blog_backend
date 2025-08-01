@@ -49,6 +49,27 @@ class PostController extends Controller
 
     }
 
+    public function getPostsByAuthenticatedUser(Request $request)
+    {
+        $perPage = $request->query('per_page', 5);
+        $posts = $this->postService->getPostsByUser( auth()->id(),$perPage);
+
+        if ($posts->isEmpty()) {
+            return response()->json([
+                'message' => 'No tienes publicaciones aún',
+            ]);
+        }
+
+        return PostResource::collection($posts)->additional([
+            'message' => 'Publicaciones obtenidas correctamente',
+            'meta' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'total' => $posts->total(),
+                'per_page' => $posts->perPage()
+            ]
+        ]);
+    }
     public function show(Post $post)
     {
         return response()->json([
