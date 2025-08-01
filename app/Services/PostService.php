@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use App\Models\Post;
+use App\Models\Image;
 
 
 class PostService
@@ -44,14 +45,18 @@ class PostService
 
     public function update(Post $post, array $data): Post
     {
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'No puedes modificar este post');
+        }
+
+        // Solo actualiza los campos que estén presentes
         $post->fill([
-            'title' => $data['title'],
-            'body' => $data['body'],
+            'title' => $data['title'] ?? $post->title,
+            'body' => $data['body'] ?? $post->body,
         ]);
         $post->save();
 
         if (isset($data['images'])) {
-            // Opcional: borrar imágenes anteriores
             $this->deleteAllImages($post);
             $this->storeImages($post, $data['images']);
         }

@@ -59,18 +59,26 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $updated = $this->postService->update($post, $request->validated() + [
-            'images' => $request->file('images'),
-        ]);
+        $validated = $request->validated();
+
+        if ($request->hasFile('images')) {
+            $validated['images'] = $request->file('images');
+        }
+
+        $updated = $this->postService->update($post, $validated);
 
         return response()->json([
             'message' => 'Post actualizado correctamente',
             'data' => new PostResource($updated),
+            'request' => $validated
         ]);
     }
 
     public function destroy(Post $post)
-    {
+    {  
+        if ($post->user_id !== auth()->id()) {
+            return response()->json(['message' => 'No tienes permiso para eliminar este post'], 403);
+        }
         $this->postService->delete($post);
 
         return response()->json([

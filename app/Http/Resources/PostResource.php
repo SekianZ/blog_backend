@@ -23,28 +23,9 @@ class PostResource extends JsonResource
             }),
             'user'    => [
                 'id'    => $this->user->id,
-                'name'  => $this->user->name,
+                'username'  => $this->user->username,
                 'email' => $this->user->email,
             ],
-            'likes_count' => $this->likes->count(),
-            'liked_by_users' => $this->likes->map(function ($like) {
-                return [
-                    'id'   => $like->user->id,
-                    'name' => $like->user->name,
-                ];
-            }),
-            'comments' => $this->comments->map(function ($comment) {
-                return [
-                    'id'      => $comment->id,
-                    'body' => $comment->body,
-                    'user'    => [
-                        'id'    => $comment->user->id,
-                        'name'  => $comment->user->name,
-                        'email' => $comment->user->email,
-                    ],
-                    'created_at' => $comment->created_at->toDateTimeString(),
-                ];
-            }),
         ];
     }
 }
