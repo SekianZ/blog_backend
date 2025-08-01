@@ -47,7 +47,7 @@ class ImageFactory extends Factory
         $image->save($fullPath, quality: 80);
 
         return [
-            'url' => 'storage/' . $relativePath,
+            'url' => $relativePath,
         ];
     }
 }
