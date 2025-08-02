@@ -5,11 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
-
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+use App\Http\Controllers\Api\ProfileController;
 //POST---------------------------------------------------------------------------------------------------------------
 
 // 🔓 Rutas públicas (no requieren autenticación)
@@ -40,3 +36,16 @@ Route::get('/comments/{post}/comments', [CommentController::class, 'getCommentsP
 
 //Obtener likes de un post 
 Route::get('/likes/{post}', [LikeController::class, 'index'])->name('likes.index');
+
+
+
+//PROFILE---------------------------------------------------------------------------------------------------------------
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::patch('/profile', [ProfileController::class, 'updateProfile']); // PATCH para actualizaciones parciales
+    Route::post('/profile/image', [ProfileController::class, 'storeProfileImage']);
+    Route::delete('/profile/user', [ProfileController::class, 'destroy']);
+});
