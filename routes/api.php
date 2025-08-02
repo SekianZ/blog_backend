@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\ProfileController;
 
 // 🔓 Rutas públicas (no requieren autenticación)
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-
+Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
 
 // 🔐 Rutas protegidas (requieren autenticación)
 Route::middleware('auth:sanctum')->group(function () {

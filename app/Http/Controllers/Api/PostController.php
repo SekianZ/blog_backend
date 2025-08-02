@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Post\SearchPostsRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Services\PostService;
@@ -35,6 +36,25 @@ class PostController extends Controller
             ]
         ]);
     }
+
+    public function search(SearchPostsRequest $request)
+    {
+        $validated = $request->validated();
+        $perPage = $validated['per_page'] ?? 10;
+
+        $posts = $this->postService->search($validated['text'], $perPage);
+
+        return PostResource::collection($posts)->additional([
+            'message' => 'Lista de publicaciones obtenida correctamente',
+            'meta' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'total' => $posts->total(),
+                'per_page' => $posts->perPage(),
+            ]
+        ]);
+    }
+
 
     public function store(StorePostRequest $request)
     {

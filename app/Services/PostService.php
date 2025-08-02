@@ -28,8 +28,11 @@ class PostService
 
     public function search(string $query, int $perPage = 10): LengthAwarePaginator
     {
-        return Post::where('title', 'like', "%$query%")
-            ->orWhere('message', 'like', "%$query%")
+        return Post::query()
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%$query%")
+                ->orWhere('body', 'like', "%$query%");
+            })
             ->with('user')
             ->latest()
             ->paginate($perPage);
