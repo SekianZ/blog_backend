@@ -8,6 +8,10 @@ class Comment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'message',
+    ];
+
     public function post()
     {
         return $this->belongsTo(Post::class);

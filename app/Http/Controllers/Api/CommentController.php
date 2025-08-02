@@ -53,13 +53,18 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
+    public function store(StoreCommentRequest $request, Post $post)
     {
-        $comment = $this->commentService->create($request->validated());
+        $comment = $this->commentService->create(
+            $request->validated()['message'],
+            $post->id,
+            auth()->id()
+        );
+
         return response()->json([
             'message' => 'Comentario creado correctamente',
             'data' => new CommentResource($comment),
-        ],201);
+        ], 201);
     }
 
     /**
@@ -98,9 +103,29 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        $user = auth()->user();
+
+        $deletedBy = null;
+
+        if ($comment->user_id === $user->id) {
+            $deletedBy = 'autor del comentario';
+        } elseif ($comment->post->user_id === $user->id) {
+            $deletedBy = 'autor del post';
+        } else {
+            return response()->json([
+                'message' => 'No tienes permiso para eliminar este comentario'
+            ], 403);
+        }
+
         $comment->delete();
+
         return response()->json([
-            'message' => 'Comentario eliminado correctamente'
+            'message' => "Comentario eliminado correctamente por el $deletedBy",
+            'deleted_by' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'rol' => $deletedBy,
+            ]
         ]);
     }
 }

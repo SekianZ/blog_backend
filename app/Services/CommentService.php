@@ -35,11 +35,14 @@ class CommentService
     /**
      * Crear un nuevo recurso.
      */
-    public function create(array $data)
+    public function create(string $message,int $post_id,int $user_id)
     {
-        $Comment = new Comment($data);
-        $Comment->user_id = Auth::id();
+        $Comment = new Comment();
+        $Comment->post_id = $post_id;
+        $Comment->user_id = $user_id;
+        $Comment->message = $message;
         $Comment->save();
+
         return $Comment;
     }
 
