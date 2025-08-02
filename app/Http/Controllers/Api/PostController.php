@@ -91,7 +91,6 @@ class PostController extends Controller
         return response()->json([
             'message' => 'Post actualizado correctamente',
             'data' => new PostResource($updated),
-            'request' => $validated
         ]);
     }
 
