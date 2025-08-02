@@ -33,6 +33,7 @@ Route::get('/comments/{post}/comments', [CommentController::class, 'getCommentsP
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments/{post}', [CommentController::class, 'store'])->name(name: 'comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name(name: 'comments.destroy');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name(name: 'comments.update');
 });
 
 //LIKES-------------------------------------------------------------------------------------------------------------

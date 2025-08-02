@@ -91,6 +91,14 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
+        $user = auth()->user();
+
+        if ($comment->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'No tienes permiso para editar este comentario.'
+            ], 403);
+        }
+
         $updated = $this->commentService->update($comment, $request->validated());
         return response()->json([
             'message' => 'Comentario actualizado correctamente',
