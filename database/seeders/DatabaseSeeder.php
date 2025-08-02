@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'user',
             'password' => 12345678,
             'cellphone' => '123456789',
+            'sex' => 'F'
         ]);
 
         // Crear 15 posts asociados al usuario

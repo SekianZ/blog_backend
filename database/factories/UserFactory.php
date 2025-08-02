@@ -52,6 +52,7 @@ class UserFactory extends Factory
             'profile_photo' => 'storage/' . $relativePath, // <- aquí
             'cellphone' => $this->faker->phoneNumber(),
             'remember_token' => Str::random(10),
+            'sex' => $this->faker->randomElement(['F', 'M']),
         ];
     }
 
