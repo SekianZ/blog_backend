@@ -31,12 +31,34 @@ class LikeService
     /**
      * Crear un nuevo recurso.
      */
-    public function create(array $data)
+    public function alternate(array $data, $post_id)
     {
-        $Like = new Like($data);
-        $Like->user_id = Auth::id();
-        $Like->save();
-        return $Like;
+        $userId = Auth::id();
+
+        // Verificar si ya existe un like de este usuario para este post
+        $existingLike = Like::where('user_id', $userId)
+                            ->where('post_id', $post_id)
+                            ->first();
+
+        if ($existingLike) {
+            // Ya le dio like: lo quitamos
+            $existingLike->delete();
+            return [
+                'liked' => false,
+                'like' => null,
+            ];
+        } else {
+            // No le dio like: lo agregamos
+            $like = new Like($data);
+            $like->user_id = $userId;
+            $like->post_id = $post_id;
+            $like->save();
+
+            return [
+                'liked' => true,
+                'like' => $like,
+            ];
+        }
     }
 
     /**

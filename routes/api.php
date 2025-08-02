@@ -37,6 +37,9 @@ Route::get('/comments/{post}/comments', [CommentController::class, 'getCommentsP
 //Obtener likes de un post 
 Route::get('/likes/{post}', [LikeController::class, 'index'])->name('likes.index');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/likes/{post}', [LikeController::class, 'alternateLike'])->name('likes.alternateLike');
+});
 
 
 //PROFILE---------------------------------------------------------------------------------------------------------------

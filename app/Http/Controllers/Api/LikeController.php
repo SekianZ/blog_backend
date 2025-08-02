@@ -42,12 +42,14 @@ class LikeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLikeRequest $request)
+    public function alternateLike(Post $post, StoreLikeRequest $request)
     {
-        $like = $this->likeService->create($request->validated());
+        $result = $this->likeService->alternate($request->validated(), $post->id);
+
         return response()->json([
-            'data' => new LikeResource($like),
-            'message' => 'Like creado correctamente',
+            'liked' => $result['liked'],
+            'data' => $result['like'] ? new LikeResource($result['like']) : null,
+            'message' => $result['liked'] ? 'Like agregado correctamente' : 'Like eliminado correctamente',
         ]);
     }
 
