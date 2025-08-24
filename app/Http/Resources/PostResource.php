@@ -24,6 +24,7 @@ class PostResource extends JsonResource
                 'username' => $this->user?->username,
                 'email' => $this->user?->email,
             ]),
+            'likes_count' => $this->likes_count,
         ];
     }
 }

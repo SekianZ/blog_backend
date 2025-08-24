@@ -15,7 +15,10 @@ class PostService
 {
     public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
     {
-        return Post::with(['user', 'images'])->latest()->paginate($perPage);
+        return Post::with(['user', 'images'])
+        ->withCount('likes') // 👈 agrega una columna likes_count
+        ->latest()
+        ->paginate($perPage);
     }
 
     public function getPostsByUser(int $userId, int $perPage = 15): LengthAwarePaginator
